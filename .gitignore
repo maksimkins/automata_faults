@@ -1,0 +1,45 @@
+# Ignore virtual environment
+venv/
+.Venv/
+env/
+ENV/
+.venv/
+venv.bak/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Cache and logs
+*.log
+*.out
+*.err
+*.swp
+*.swo
+*.swn
+*.DS_Store
+
+# VS Code settings
+.vscode/
+
+# Jupyter Notebook metadata
+*.nbconvert.ipynb
+*.nb.html
+
+# Pipenv and Poetry
+Pipfile
+Pipfile.lock
+poetry.lock
+
+# Jupyter Notebook kernel specs
+.kernels/
+
+# Python virtual environment
+.python-version
+
+# MacOS files
+.DS_Store
