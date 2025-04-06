@@ -1,0 +1,19 @@
+[project]
+name = "automata-faults"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "maksimkins",email = "maks.aleshkov.04@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "matplotlib (>=3.10.1,<4.0.0)",
+    "more-itertools (>=10.6.0,<11.0.0)",
+    "numpy (>=2.2.4,<3.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
