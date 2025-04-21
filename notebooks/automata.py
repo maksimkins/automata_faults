@@ -1,7 +1,7 @@
 from itertools import combinations
 from collections import defaultdict
 
-def AnyUnreachableStates(phi, A, Q, q_start):
+def any_unreachable_states(phi, A, Q, q_start):
     visited = set()
     to_check = [q_start]
  
@@ -18,23 +18,23 @@ def AnyUnreachableStates(phi, A, Q, q_start):
 # total = O(|Q| * |A|) 
 
 
-def StatesEquivalentRec(A, phi, psi, q0, q1, Q_length, word_len = 0, word = ''): 
+def states_equivalent_rec(A, phi, psi, q0, q1, Q_length, word_len = 0, word = ''): 
     word_len += 1
     for a in A:
         exit_q0_symbol, exit_q1_symbol = psi[(q0, a)], psi[(q1, a)]
         new_q0, new_q1 = phi[(q0, a)], phi[(q1, a)]
         new_word = word + str(a)
 
-        #print('\nenter_symbol:', a)
-        #print('word:', new_word)
-        #print('exit_q0_symbol:', exit_q0_symbol, 'exit_q1_symbol:', exit_q1_symbol)
-        #print('new_q0:', new_q0, 'new_q1:', new_q1)
+        ##print('\nenter_symbol:', a)
+        ##print('word:', new_word)
+        ##print('exit_q0_symbol:', exit_q0_symbol, 'exit_q1_symbol:', exit_q1_symbol)
+        ##print('new_q0:', new_q0, 'new_q1:', new_q1)
 
         if exit_q0_symbol != exit_q1_symbol:
-            print(new_word, '- word that indicates that states are not equivalent')
+            #print(new_word, '- word that indicates that states are not equivalent')
             return False
         if word_len < Q_length - 1: 
-            res = StatesEquivalentRec(A, phi, psi, new_q0, new_q1, Q_length, word_len, new_word)
+            res = states_equivalent_rec(A, phi, psi, new_q0, new_q1, Q_length, word_len, new_word)
             if res == False: return False
 
     return True
@@ -42,22 +42,22 @@ def StatesEquivalentRec(A, phi, psi, q0, q1, Q_length, word_len = 0, word = ''):
 
 
 
-def AnyEquivalentStates(Q, A, phi, psi):
+def any_equivalent_states(Q, A, phi, psi):
     len_Q = len(Q)
     for q0, q1 in combinations(Q, 2):
-        if StatesEquivalentRec(A, phi, psi, q0, q1, len_Q):
+        if states_equivalent_rec(A, phi, psi, q0, q1, len_Q):
             return True
-        print('states', q0, 'and', q1, 'are not equivalent')
+        #print('states', q0, 'and', q1, 'are not equivalent')
     
     return False
 # total = O(C{Q,2} * log(|Q| - 1))
 
-def IsMinimized(Q, A, phi, psi, q_start):
+def is_minimized(Q, A, phi, psi, q_start):
     
-    if AnyUnreachableStates(phi, A, Q, q_start):
+    if any_unreachable_states(phi, A, Q, q_start):
         return False
     
-    if AnyEquivalentStates(Q, A, phi, psi):
+    if any_equivalent_states(Q, A, phi, psi):
         return False
     
     return True
@@ -149,7 +149,7 @@ def rec_get_edge_path_to_final(cur_vertex, final_vertexes, edges, seen=None, pat
         len_path = len(path)
         if len_path % 2 == 0:
             for i in range(0, len_path, 2):
-                #print(path[i][2], (path[i+1][2][1], path[i+1][2][0]))
+                ##print(path[i][2], (path[i+1][2][1], path[i+1][2][0]))
                 if path[i][2] != (path[i+1][2][1], path[i+1][2][0]):
                         return path
 
@@ -182,9 +182,9 @@ def is_automata_ambiguous(schema_encoding, A, B, Q, phi, psi, q_start):
         print('word1:', word1)
         print('word2:', word2)
         return True
-            #print(v1, '->', v2, 'weight:', weight)
+            ##print(v1, '->', v2, 'weight:', weight)
     else:
-        print("No path to final vertex found")
+        #print("No path to final vertex found")
         return False
 
         
