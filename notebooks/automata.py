@@ -18,38 +18,28 @@ def any_unreachable_states(phi, A, Q, q_start):
 # total = O(|Q| * |A|) 
 
 
-def states_equivalent_rec(A, phi, psi, q0, q1, Q_length, word_len = 0, word = ''): 
-    word_len += 1
-    for a in A:
-        exit_q0_symbol, exit_q1_symbol = psi[(q0, a)], psi[(q1, a)]
-        new_q0, new_q1 = phi[(q0, a)], phi[(q1, a)]
-        new_word = word + str(a)
 
-        ##print('\nenter_symbol:', a)
-        ##print('word:', new_word)
-        ##print('exit_q0_symbol:', exit_q0_symbol, 'exit_q1_symbol:', exit_q1_symbol)
-        ##print('new_q0:', new_q0, 'new_q1:', new_q1)
-
-        if exit_q0_symbol != exit_q1_symbol:
-            #print(new_word, '- word that indicates that states are not equivalent')
-            return False
-        if word_len < Q_length - 1: 
-            res = states_equivalent_rec(A, phi, psi, new_q0, new_q1, Q_length, word_len, new_word)
-            if res == False: return False
-
-    return True
-# total = O(log(|Q| - 1))
+def any_equivalent_states2(psi, phi, A, Q):
+    sigs = {q: tuple(psi[(q, a)] for a in A) for q in Q}
+    part = {}
+    for i, sig in enumerate(sorted(set(sigs.values()))):
+        for q in Q:
+            if sigs[q] == sig:
+                part[q] = i
 
 
+    for _ in range(len(Q) - 1):
+        sigs = {q: tuple((part[phi[(q, a)]], psi[(q, a)]) for a in A) for q in Q}
+        new_part = {}
+        for i, sig in enumerate(sorted(set(sigs.values()))):
+            for q in Q:
+                if sigs[q] == sig:
+                    new_part[q] = i
+        if new_part == part:
+            break
+        part = new_part
 
-def any_equivalent_states(Q, A, phi, psi):
-    len_Q = len(Q)
-    for q0, q1 in combinations(Q, 2):
-        if states_equivalent_rec(A, phi, psi, q0, q1, len_Q):
-            return True
-        #print('states', q0, 'and', q1, 'are not equivalent')
-    
-    return False
+    return len(set(part.values())) != len(Q) # O(|Q|^2 * |A|)
 # total = O(C{Q,2} * log(|Q| - 1))
 
 def is_minimized(Q, A, phi, psi, q_start):
@@ -57,7 +47,7 @@ def is_minimized(Q, A, phi, psi, q_start):
     if any_unreachable_states(phi, A, Q, q_start):
         return False
     
-    if any_equivalent_states(Q, A, phi, psi):
+    if any_equivalent_states2(psi, phi, A, Q):
         return False
     
     return True
@@ -179,8 +169,8 @@ def is_automata_ambiguous(schema_encoding, A, B, Q, phi, psi, q_start):
                 word1 += f' {weight[0]}'
             else:
                 word2 += f' {weight[1]}'
-        print('word1:', word1)
-        print('word2:', word2)
+        #print('word1:', word1)
+        #print('word2:', word2)
         return True
             ##print(v1, '->', v2, 'weight:', weight)
     else:
