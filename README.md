@@ -50,21 +50,48 @@ cd automata_faults
 ## Usage Example
 from automata_faults import is_minimized, is_ambigous, number_of_fault_diagnostics, is_fault_happened
 
-# Define your automaton (Q, A, phi, psi, q_start, etc.)
-Q = {"q0", "q1"}
-A = {"0", "1"}
-B = {"0", "1"}
-q_start = "q0"
+```python
+from automata_faults import (
+    is_minimized,
+    is_ambigous,
+    number_of_fault_diagnostics,
+    is_fault_happened
+)
 
-phi = {("q0","0"):"q1", ("q0","1"):"q0", ("q1","0"):"q0", ("q1","1"):"q1"}
-psi = {("q0","0"):"0", ("q0","1"):"1", ("q1","0"):"1", ("q1","1"):"0"}
+# Define automaton components
+Q = {"q0", "q1"}             # States
+A = {"0", "1"}               # Input alphabet
+B = {"0", "1"}               # Output alphabet
+q_start = "q0"               # Initial state
 
-schema_encoding = {"0":"0", "1":"1"}
+# Transition function φ: (state, input) -> next state
+phi = {
+    ("q0", "0"): "q1",
+    ("q0", "1"): "q0",
+    ("q1", "0"): "q0",
+    ("q1", "1"): "q1",
+}
 
-print(is_minimized(Q, A, phi, psi, q_start))                     # True/False
-print(is_ambigous(schema_encoding, A, B, Q, phi, psi, q_start))  # True/False/None
-print(number_of_fault_diagnostics(schema_encoding, A, B, Q, phi, psi, q_start))
-print(is_fault_happened(schema_encoding, A, B, Q, phi, psi, q_start))
+# Output function ψ: (state, input) -> output
+psi = {
+    ("q0", "0"): "0",
+    ("q0", "1"): "1",
+    ("q1", "0"): "1",
+    ("q1", "1"): "0",
+}
+
+# Encoding schema f: input -> binary code
+schema_encoding = {
+    "0": "0",
+    "1": "1",
+}
+
+# Run checks
+print("Is minimized:", is_minimized(Q, A, phi, psi, q_start))  
+print("Is ambiguous:", is_ambigous(schema_encoding, A, B, Q, phi, psi, q_start))
+print("Number of diagnosable faults:", number_of_fault_diagnostics(schema_encoding, A, B, Q, phi, psi, q_start))
+print("Did a fault happen?:", is_fault_happened(schema_encoding, A, B, Q, phi, psi, q_start))
+```
 
 ## Testing
 
